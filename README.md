@@ -62,3 +62,105 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+
+### Instalando nuevo proyecto laravel
+	composer create-project laravel/laravel websiteadmin  8.6
+
+## configurar el .env
+
+## agregando tabla proyectos
+	php artisan make:migration proyectos
+
+## migrando
+	php artisan migrate
+
+
+## instalando UI estandar de laravel
+	composer require laravel/ui 
+
+## instalando dependencia de boostrap auth
+	php artisan ui bootstrap --auth 
+
+## instalando npm nesesario 
+	npm install
+
+## instalar dependencia de npm  , es opcional verificar si el proyecto lo requiere
+	npm install resolve-url-loader@^5.0.0 --save-dev --legacy-peer-deps
+
+
+### Añadir plandilla css js
+## En directorio del proyecto laravel /public migrar las carpetas css y js de la plantila
+
+## en resourcers/views/layouts  copiar y pegar el archivo app.blade.php y la copia renombrarla como tenplate.blade.php
+## opcional, en la plantilla welcome , borrar y redireccionar hacia template.blade.php 
+
+	@extends('layouts.template')
+
+### CREANDO CRUD PARA ADMINISTRAR CONTENIDO
+## instalando paquete de crud ibex/crud-generator
+	composer require ibex/crud-generator --dev
+
+## este paquete instalara controladores, modelos vistas 
+	php artisan vendor:publish --tag=crud
+
+	php artisan make:crud proyectos
+
+## agregar ruta para crud de proyectos
+
+	Route::resource('/proyectos', App\Http\Controllers\ProyectoController::class);
+
+## crear un controllador para administrar el contenido de un portafolio
+
+	php artisan make:controller PortafolioController
+	
+## La arquitectura sera un modelo => 2 controladores
+## model proyecto => PortafolioController , ProyectoController
+
+
+        <?php
+
+        namespace App\Http\Controllers;
+        use App\Models\Proyecto;
+        use Illuminate\Http\Request;
+
+        class PortafolioController extends Controller
+        {
+            public function index()
+            {
+                $proyectos = Proyecto::paginate();
+
+                return view('proyecto.index', compact('proyectos'))
+                    ->with('i', (request()->input('page', 1) - 1) * $proyectos->perPage());
+            }
+        }
+
+
+
+## Añadiendo ruta
+
+	Route::get('/', App\Http\Controllers\PortafolioController::class, 'index' );
+
+## AJUSTES EN LA PLANTILLA
+
+# Ajustando grid de portafolio
+
+### Ajustando login 
+
+## Probar formulario de registro y registrar un usuario
+
+# ejemolo 
+
+# admin@gmail.com
+# Pumas10.
+
+
+## añadir auth en  ProyectoController
+
+ public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+	
